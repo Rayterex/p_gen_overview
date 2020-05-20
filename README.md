@@ -1,41 +1,127 @@
 # 3Gen
-Procedural 3D Environments, Trees, Grass, Flowers and Rocks Generator plug-in for Autodesk Maya.
+[Procedural 3D Environments, Trees, Grass, Flowers, Materials and Rocks Generator plug-in for Autodesk Maya](https://www.youtube.com/watch?v=fMZgxDl-WKo).
 
 <p align = "center">
   <img src = "pg_overview/demo/3gen_demo.gif" width = "99%">
 </p>
 
+## M-Gen - Materials Generator
+
+<p align = "center"> 
+  <img src = "pg_overview/logo/logo_material.png" width = "99%">
+</p>
+
+[Frame Buffer Material](https://www.youtube.com/watch?v=fJ9B3AEXfGo) - extracts Maya Viewport framebuffer as material. Frame Buffer material in combination with output image modifiers is also part of the [Auto snapshot plug-in](https://www.youtube.com/watch?v=RkdEwxtP6mU).
+
+[Procedural Brick-Wall](https://www.youtube.com/watch?v=YeQthsW8HCQ) - recreate brick-wall materials by mixing noise materials with bricks material. Textures could also be recreated in same maner, by mixing several uniform colors using bricks material and noise as masks.
+
+[Patterns Materials](https://www.youtube.com/watch?v=oVyIQ_Hr2Z0) - by mixing pattern materials more interesting and more complicated patterns could be recreated instantly.
+
+[Cartoonize Modifier](https://www.youtube.com/watch?v=4mSVWJfoSWc) - cartoonizes input image. Output can be black-white or colorized cartoonized image.
+
+<p align = "center"> 
+  <img src = "pg_overview/material/frame_buffer_modifier.gif" width = "49%"/>
+  <img src = "pg_overview/material/brick_wall_modifier.gif" width = "49%"/>
+  <img src = "pg_overview/material/patterns_material.gif" width = "49%"/>
+  <img src = "pg_overview/material/cartoonize_modifier.gif" width = "49%"/>
+</p>
+
+## E-Gen - Procedural Environment Generator
+
+<p align = "center">
+  <img src = "pg_overview/logo/logo_environment.png" width = "99%">
+</p>
+
+Examples of procedural terrains
+
+<p align = "center"> 
+  <img src = "pg_overview/terrain/1.gif" width = "49%"/>
+  <img src = "pg_overview/terrain/2.gif" width = "49%"/> 
+</p>
+
+Erosion modifier:
+
+<p align = "center">
+  <img src = "pg_overview/erosion/1.png" width = "24%"> 
+  <img src = "pg_overview/erosion/2.png" width = "24%"> 
+  <img src = "pg_overview/erosion/3.png" width = "24%"> 
+  <img src = "pg_overview/erosion/4.png" width = "24%"> 
+</p>
+
+## T-Gen - Procedural Trees Generator
+
+T-Gen is tool for procedural generation of 3D Trees Models. It is possible to define type of tree, its topology and textures.
+
+<p align = "center">
+  <img src = "pg_overview/logo/logo_trees.png" width = "99%"> 
+</p>
+
+Edit textures (leafs and tree barks) easily from 3Gen GUI:
+
+<p align = "center">
+  <img src = "pg_overview/textures/leafs.gif" width = "49%"> 
+  <img src = "pg_overview/textures/barks.gif" width = "49%"> 
+</p>
+
+3Gen support most of the three and four channel images: png, jpg, tiff, tga. 
+
+Four examples of same tree model with different textures and evironment
+
+<p align = "center"> 
+  <img src = "pg_overview/tree/1.png" width = "24%"/>
+  <img src = "pg_overview/tree/2.png" width = "24%"/> 
+  <img src = "pg_overview/tree/3.png" width = "24%"/>
+  <img src = "pg_overview/tree/4.png" width = "24%"/> 
+</p>
+
+## G-Gen - Procedural Grass and Flowers Generator
+
+<p align = "center"> 
+  <img src = "pg_overview/logo/logo_grass.png" width = "99%">
+</p>
+
+In progress...
+
 ## Comparing 3Gen with Maya cmds
 
 ### API comparison
 
-3Gen API:
+3Gen API - Primitive objects:
 
 
 ```python
+import numpy as np
+
 from pg_source.pg_object.pg_maya_objects import maya_tube;
 from pg_source.pg_object.pg_maya_objects import maya_plane;
+from pg_source.pg_object.pg_maya_objects import maya_sphere;
 
 # Create Tube in 3D
 TUBE = maya_tube.Maya_tube(name = 'tube_1', sx = 11, sy = 3, height = 35, radius_down = 3.5, radius_up = 3.5)
 TUBE.rotate(z = 70, x = 15)
-TUBE.translate(0, 0, 10)
+TUBE.translate(np.array([0, 0, 10]))
 TUBE.create_object()
 
 # Create Plane in 3D
 PLANE = maya_plane.Maya_plane(name = 'plane_1', sx = 8, sy = 15, height = 40, width = 31)
 PLANE.rotate(y = 30, x = 60)
-PLANE.translate(0, -10, 0)
+PLANE.translate(np.array([0, -10, 0]))
 PLANE.create_object()
 
 # Create Cone in 3D
 CONE = maya_tube.Maya_tube(name = 'cone_1', sx = 11, sy = 45, height = 19.2, radius_down = 3.5, radius_up = 0, power = 2)
 CONE.rotate(z = 0, x = 15)
-CONE.translate(0, 3, -10)
+CONE.translate(np.array([0, 3, -10]))
 CONE.create_object()
+
+# Create Sphere in 3D
+SPHERE = maya_sphere.Maya_sphere(name = 'sphere_1', sx = 11, sy = 15, radius = 5.0)
+SPHERE.rotate(x = 17, y = 45)
+SPHERE.translate(np.array([0, 5, -7]))
+SPHERE.create_object()
 ```
 
-Maya cmds:
+Maya cmds - Primitive objects:
 
 ```python
 import maya.cmds as cmds
@@ -58,12 +144,22 @@ cmds.polyCone(sx = 11, sy = 45, h = 19.2, r = 3.5, n = 'cone_2')
 cmds.setAttr('cone_2.ry', 170)
 cmds.setAttr('cone_2.rz', 55)
 cmds.setAttr('cone_2.tx', -14)
+
+# Create Sphere in 3D
+cmds.polySphere(sx = 15, sy = 35, r = 5.5, n = 'sphere_2')
+cmds.setAttr('sphere_2.rx', 13)
+cmds.setAttr('sphere_2.ry', 46)
+cmds.setAttr('sphere_2.tx', -6)
 ```
+
+
+Resulting primitive objects created with 3Gen API and Maya Python API:
 
 <p align = "center">
   <img src = "pg_overview/api/p_gen.png"  width = "49%"/>
   <img src = "pg_overview/api/maya.png" width = "49%"/> 
 </p>
+
 
 ### Benchmarks
 
@@ -146,105 +242,44 @@ from pg_source.pg_object.pg_maya_objects.plane import poly_connections
 Whole 3Gen GUI is customizable from config.json. All objects, images, parameters and their order is defined here. User can freely change this configuration file and just rerun the application.
 
 ```json
-    "SUN" : {
+"SUN" : {
 
-        "CONFIG_IMAGE" : {
+    "CONFIG_IMAGE" : {
 
-            "src_path_relative" : "textures/sun",
-            "src_img_name"      : "sun_1"},
+        "src_path_relative" : "textures/sun",
+        "src_img_name"      : "sun_1"},
 
-        "ATTRIBUTES" : {
+    "ATTRIBUTES" : {
 
-            "intens"            : {"name" : "Ints", "minValue" :       1, "value" :      5, "maxValue" :      9, "type" :   "int", "annotation" : "Sun Intensity"},
-            "x"                 : {"name" : "X"   , "minValue" : -1200.0, "value" :    0.0, "maxValue" : 1200.0, "type" : "float", "annotation" : "X position"},
-            "y"                 : {"name" : "Y"   , "minValue" :   600.0, "value" : 1200.0, "maxValue" : 1800.0, "type" : "float", "annotation" : "Y position"},
-            "z"                 : {"name" : "Z"   , "minValue" : -1200.0, "value" :    0.0, "maxValue" : 1200.0, "type" : "float", "annotation" : "Z position"},
-            "maya_object_name"  : "Sun"}},
+        "intens"            : {"name" : "Ints", "minValue" :       1, "value" :      5, "maxValue" :      9, "type" :   "int", "annotation" : "Sun Intensity"},
+        "x"                 : {"name" : "X"   , "minValue" : -1200.0, "value" :    0.0, "maxValue" : 1200.0, "type" : "float", "annotation" : "X position"},
+        "y"                 : {"name" : "Y"   , "minValue" :   600.0, "value" : 1200.0, "maxValue" : 1800.0, "type" : "float", "annotation" : "Y position"},
+        "z"                 : {"name" : "Z"   , "minValue" : -1200.0, "value" :    0.0, "maxValue" : 1200.0, "type" : "float", "annotation" : "Z position"},
+        "maya_object_name"  : "Sun"}},
 
-    "CONFIG_SKY" : {
+"PERLIN" : {
 
-        "CONFIG_IMAGE" : {
+    "CONFIG_IMAGE" : {
 
-            "src_path_relative" : "textures/config_sky",
-            "src_img_name"      : "config_sky",},
+        "tgt_path_relative" : "materials",
+        "tgt_png_name"      : "perlin"},
 
-        "ATTRIBUTES" : {
+    "ATTRIBUTES" : {
 
-            "r"                 : {"name" : "R" , "minValue" :  1000, "value" : 2000, "maxValue" : 3000, "type" :   "int", "annotation" : "Radius of Sky Dome"},
-            "trl_x"             : {"name" : "tX", "minValue" : -1000, "value" :    0, "maxValue" : 1000, "type" :   "int", "annotation" : "Translate X axis"},
-            "trl_y"             : {"name" : "tY", "minValue" : -1000, "value" :    0, "maxValue" : 1000, "type" :   "int", "annotation" : "Trasnalte Y axis"},
-            "trl_z"             : {"name" : "tZ", "minValue" : -1000, "value" :    0, "maxValue" : 1000, "type" :   "int", "annotation" : "Translate Z axis"},
-            "rot_x"             : {"name" : "rX", "minValue" :  -180, "value" :    0, "maxValue" :  180, "type" :   "int", "annotation" : "Rotate by X axis"},
-            "rot_y"             : {"name" : "rY", "minValue" :  -180, "value" :    0, "maxValue" :  180, "type" :   "int", "annotation" : "Rotate by Y axis"},
-            "rot_z"             : {"name" : "rZ", "minValue" :  -180, "value" :    0, "maxValue" :  180, "type" :   "int", "annotation" : "Roatet by Z axis"},
-            "scl_x"             : {"name" : "sX", "minValue" :   0.5, "value" :  1.0, "maxValue" :  1.5, "type" : "float", "annotation" : "Scale by X axis"},
-            "scl_y"             : {"name" : "sY", "minValue" :   0.5, "value" :  1.0, "maxValue" :  1.5, "type" : "float", "annotation" : "Scale by Y axis"},
-            "scl_z"             : {"name" : "sZ", "minValue" :   0.5, "value" :  1.0, "maxValue" :  1.5, "type" : "float", "annotation" : "Scale by Z axis"},
-            "maya_object_name"  : "aiSkyDomeLight1",
-            "maya_texture_name" : "sky_texture"}},
+        "height"    : {"name" : "H"   , "minValue" :    64, "value" :   256, "maxValue" : 1024, "type" :   "int", "annotation" : "Height of material"},
+        "width"     : {"name" : "W"   , "minValue" :    64, "value" :   256, "maxValue" : 1024, "type" :   "int", "annotation" : "Width of material"},
+        "octave"    : {"name" : "Oct" , "minValue" :     1, "value" :     5, "maxValue" :    9, "type" :   "int", "annotation" : "Octave"},
+        "seed"      : {"name" : "Seed", "minValue" :     1, "value" :   500, "maxValue" : 1000, "type" :   "int", "annotation" : "Seed for random number generator"},
+        "amplitude" : {"name" : "Ampl", "minValue" :     1, "value" :   177, "maxValue" :  250, "type" :   "int", "annotation" : "Amplitude"},
+        "frequency" : {"name" : "Freq", "minValue" : 0.001, "value" : 0.044, "maxValue" :  0.1, "type" : "float", "annotation" : "Frequency"}}},
 ```
 
 <p align = "center">
-  <img src = "pg_overview/gui/1.png" width = "99%"/>
+  <img src = "pg_overview/gui/e_gen_1.png" width = "49%"/>
+  <img src = "pg_overview/gui/e_gen_2.png" width = "49%"/>
 </p>
 
-## E-Gen - Procedural Environment Generator
-
-<p align = "center">
-  <img src = "pg_overview/logo/logo_environment.png" width = "99%">
-</p>
-
-Examples of procedural terrains
-
-<p align = "center"> 
-  <img src = "pg_overview/terrain/1.gif" width = "49%"/>
-  <img src = "pg_overview/terrain/2.gif" width = "49%"/> 
-</p>
-
-Erosion modifier:
-
-<p align = "center">
-  <img src = "pg_overview/erosion/1.png" width = "24%"> 
-  <img src = "pg_overview/erosion/2.png" width = "24%"> 
-  <img src = "pg_overview/erosion/3.png" width = "24%"> 
-  <img src = "pg_overview/erosion/4.png" width = "24%"> 
-</p>
-
-## T-Gen - Procedural Trees Generator
-
-<p align = "center">
-  <img src = "pg_overview/logo/logo_trees.png" width = "99%"> 
-</p>
-
-Simple textures editing
-
-<p align = "center">
-  <img src = "pg_overview/textures/leafs.gif" width = "99%"> 
-  <img src = "pg_overview/textures/barks.gif" width = "99%"> 
-</p>
-
-<p align = "center"> 
-  <img src = "pg_overview/tree/1.png" width = "24%"/>
-  <img src = "pg_overview/tree/2.png" width = "24%"/> 
-  <img src = "pg_overview/tree/3.png" width = "24%"/>
-  <img src = "pg_overview/tree/4.png" width = "24%"/> 
-</p>
-
-## G-Gen - Procedural Grass and Flowers Generator
-
-<p align = "center"> 
-  <img src = "pg_overview/logo/logo_grass.png" width = "99%">
-</p>
-
-## M-Gen - Materials Generator
-
-Frame Buffer Modifier and Procedural Brick-Wall Materials:
-
-<p align = "center"> 
-  <img src = "pg_overview/material/frame_buffer_modifier.gif" width = "49%"/>
-  <img src = "pg_overview/material/brick_wall_modifier.gif"   width = "49%"/>
-</p>
-
+<!---
 ## S-Gen - Snapshot Generator
 
 <p align = "center">
@@ -252,3 +287,5 @@ Frame Buffer Modifier and Procedural Brick-Wall Materials:
 </p>
 
 ## R-Gen - Rocks Generator
+
+--->
