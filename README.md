@@ -82,6 +82,18 @@ Four examples of same tree model with different textures and evironment
 
 In progress...
 
+## R-Gen - Procedural Rocks Generator
+
+<p align = "center"> 
+  <img src = "pg_overview/logo/logo_rock.png" width = "99%">
+</p>
+
+Initial mesh for procedural rocks can be based on supershapes node:
+
+<p align = "center"> 
+  <img src = "pg_overview/rock/supershape.gif" width = "49%"/>
+</p>
+
 ## Comparing 3Gen with Maya cmds
 
 ### API comparison
@@ -201,7 +213,7 @@ PLANES = pg_planes.Planes(base_name = 'plane_')
 
 for i in range(n ** 2):
     PLANES.PLANE[i] = pg_plane.Plane(name = str(i), sx = sx, sy = sy, height = h, width = w)
-    PLANES.PLANE[i].translate(x[i], 0, y[i])
+    PLANES.PLANE[i].translate(np.array(x[i], 0, y[i]))
 
 PLANES.create()
 ```
@@ -228,7 +240,7 @@ from pg_source.pg_object.pg_maya_objects.plane import poly_connections
     for i in range(n ** 2):
 
         PLANES.PLANE[i] = pg_plane.Plane(name = str(i), sx = sx, sy = sy, height = h, width = w, VTX_POS = VTX_POS, UV = UV, POLY_COUNT = POLY_COUNT, POLY_CONNECTIONS = POLY_CONNECTIONS)
-        PLANES.PLANE[i].translate(x[i], 0, y[i])
+        PLANES.PLANE[i].translate(np.array(x[i], 0, y[i]))
 
     PLANES.create()
 ```
